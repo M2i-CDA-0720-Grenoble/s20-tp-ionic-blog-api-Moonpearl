@@ -5,4 +5,5 @@ export default interface IComment extends IEntity {
   email: string,
   content: string,
   article?: IArticle,
+  articleId: number | null,
 };

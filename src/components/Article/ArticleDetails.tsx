@@ -1,5 +1,6 @@
-import { IonBadge, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from "@ionic/react";
+import { IonBadge, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonSegment, IonText, IonTitle } from "@ionic/react";
 import React, { FC } from "react";
+import { Comment } from "..";
 import { IArticle } from "../../models";
 import MarkupContainer from "../MarkupContainer";
 
@@ -9,7 +10,7 @@ interface ArticleDetailsProps {
   article: IArticle,
 }
 
-const ArticleDetails: FC<ArticleDetailsProps> = ({ article: { id, title, cover, category, createdAt, content} }) =>
+const ArticleDetails: FC<ArticleDetailsProps> = ({ article: { id, title, cover, category, createdAt, content, comments} }) =>
   <>
     <IonCard>
       <img src={cover} alt={`Cover for article: ${title}`} />
@@ -25,6 +26,22 @@ const ArticleDetails: FC<ArticleDetailsProps> = ({ article: { id, title, cover, 
       </IonCardContent>
 
     </IonCard>
+
+    {
+      comments && comments.length > 0 ?
+        <>
+          <IonTitle>Comments</IonTitle>
+          <Comment.List comments={comments} />
+        </>
+      :
+      <IonSegment>
+        <IonText color="danger"><p>No one has commented this article yet.</p></IonText>
+      </IonSegment>
+    }
+
+    <IonTitle>Add a Comment</IonTitle>
+
+    <Comment.AddForm articleId={id as number} />
   </>
 ;
 
