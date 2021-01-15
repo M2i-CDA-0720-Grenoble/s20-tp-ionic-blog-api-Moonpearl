@@ -1,0 +1,7 @@
+{
+  "name": "tp-ionic-blog",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

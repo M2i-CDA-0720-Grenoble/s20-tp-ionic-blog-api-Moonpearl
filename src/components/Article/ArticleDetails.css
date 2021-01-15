@@ -1,0 +1,7 @@
+.ArticleDetails-content {
+    text-align: justify;
+}
+
+.ArticleDetails-content > * {
+    margin-bottom: 1em!important;
+}
