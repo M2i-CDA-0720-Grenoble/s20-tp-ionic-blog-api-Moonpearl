@@ -4,12 +4,12 @@ import { IArticle } from "../models";
 
 
 interface FindSingleArticleHookValue {
-  article: IArticle,
+  article?: IArticle,
   requestState: RequestState,
   statusCode: number,
 }
 
-const useFindSingleArticle = (id: number) => {
+const useFindSingleArticle = (id: number): FindSingleArticleHookValue => {
   // Retient l'état actuel de l'article à afficher
   const [article, setArticle] = useState<IArticle>();
   // Retient l'état d'avancement actuel de la requête
@@ -24,7 +24,7 @@ const useFindSingleArticle = (id: number) => {
       // Récupère l'adresse du serveur dans les variables d'environnement (et renomme la variable par commodité)
       const { REACT_APP_API_BASEURL: API_BASEURL } = process.env;
       // Envoie une requête dans l'API pour récupérer l'article qui possède l'ID demandé
-      fetch(`${API_BASEURL}/articles/${id}`)
+      fetch(`${API_BASEURL}/articles/${id}?_expand=category`)
       // Dès que la requête a répondu, vérifie que la réponse ne contient pas un code d'erreur
       // et transforme son contenu en objet JavaScript
       .then(
@@ -46,13 +46,11 @@ const useFindSingleArticle = (id: number) => {
     [id]
   );
 
-  const returnValue = {
+  return {
     article,
     requestState,
     statusCode,
   };
-
-  return returnValue;
 }
 
 export default useFindSingleArticle;
