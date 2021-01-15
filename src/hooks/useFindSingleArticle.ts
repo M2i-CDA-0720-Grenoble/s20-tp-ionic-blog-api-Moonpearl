@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer, Reducer, Dispatch } from "react";
 import { RequestState } from "../enums";
 import { IArticle } from "../models";
+import articleReducer, { ActionType, IAction } from "../states/article";
 
 
 interface FindSingleArticleHookValue {
   article?: IArticle,
   requestState: RequestState,
   statusCode: number,
+  dispatchArticle: Dispatch<IAction>,
 }
 
 const useFindSingleArticle = (id: number): FindSingleArticleHookValue => {
   // Retient l'état actuel de l'article à afficher
-  const [article, setArticle] = useState<IArticle>();
+  // const [article, setArticle] = useState<IArticle>();
+  const [article, dispatchArticle] = useReducer<Reducer<IArticle | undefined, IAction>>(articleReducer, undefined);
   // Retient l'état d'avancement actuel de la requête
   const [requestState, setRequestState] = useState(RequestState.Idle);
   // Retient le code de réponse de la requête AJAX
@@ -38,7 +41,7 @@ const useFindSingleArticle = (id: number): FindSingleArticleHookValue => {
           return response.json();
         })
       // Stocke le résultat de la requête dans la variable d'état
-      .then( (json: IArticle) => setArticle(json) )
+      .then( (json: IArticle) => dispatchArticle({ type: ActionType.Set, article: json }) )
       // En cas d'erreur, affiche l'erreur dans la console
       .catch(error => console.error(error))
     },
@@ -50,6 +53,7 @@ const useFindSingleArticle = (id: number): FindSingleArticleHookValue => {
     article,
     requestState,
     statusCode,
+    dispatchArticle,
   };
 }
 
