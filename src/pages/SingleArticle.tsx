@@ -1,8 +1,6 @@
-import { IonSpinner, IonToast } from "@ionic/react";
 import React, { FC } from "react";
 import { Redirect, RouteComponentProps } from "react-router";
-import { Article, Layout } from "../components";
-import { RequestState } from "../enums";
+import { Article, FetchedContent, Layout } from "../components";
 import { useFindSingleArticle } from "../hooks";
 
 // Précise que le composant attend une portion variable "id" dans son URL
@@ -19,25 +17,16 @@ const SingleArticle: FC<RouteComponentProps<TParams>> = ({ match }) => {
   if (statusCode === 404) {
     return <Redirect to="/" />;
   }
-  
-  // Détermine le composant à afficher en fonction de l'état actuel de la requête
-  const displayContent = () => {
-    switch (requestState) {
-      // Requête en cours = indicateur de chargement
-      case RequestState.Pending:    return <IonSpinner />;
-      // Requête réussie = liste des articles
-      case RequestState.Success:    return article && <Article.Details article={article} />;
-      // Requête échouée = message d'erreur
-      case RequestState.Failed:     return <IonToast isOpen message="Unable to fetch article." duration={5000} />;
-      // Dans tous les autres cas = rien du tout
-      default:    return null;
-    }
-  }
 
   return (
     <Layout title="Read Article">
 
-      {displayContent()}
+      <FetchedContent
+        requestState={requestState}
+        errorMessage={`Unable to fetch article #${id}.`}
+      >
+        {article ? <Article.Details article={article} /> : null}
+      </FetchedContent>
 
     </Layout>
   )
