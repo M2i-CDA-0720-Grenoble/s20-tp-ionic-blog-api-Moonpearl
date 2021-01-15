@@ -19,7 +19,8 @@ const Home: FC = () => {
       // Récupère l'adresse du serveur dans les variables d'environnement (et renomme la variable par commodité)
       const { REACT_APP_API_BASEURL: API_BASEURL } = process.env;
       // Envoie une requête dans l'API pour récupérer l'ensemble des articles
-      fetch(`${API_BASEURL}/articles`)
+      // (dans l'ordre décroissant de date de création = du plus récent au plus ancien)
+      fetch(`${API_BASEURL}/articles?_sort=createdAt&_order=desc`)
       // Dès que la requête a répondu, vérifie que la réponse ne contient pas un code d'erreur
       // et transforme son contenu en objet JavaScript
       .then(
